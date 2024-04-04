@@ -16,3 +16,26 @@ MOV UP, RIGHT | MOV LEFT, ACC  | JRO 2          | JRO 2         |
               | MOV 1, DOWN    | JRO -4         | JRO -9        |
               |                | JRO -10        |               |
               |                | JRO -6         |               |
+
+Alternative solution
+new            |      old
+317 CYCLES     | 387 CYCLES
+6 NODES        | 6 NODES 
+26 INSTRUCTIONS|38 INSTRUCTIONS
+
+MOV UP, DOWN  |                |                |               |
+______________|________________|________________|_______________|
+MOV UP, DOWN  | COMMUNICATION  | COMMUNICATION  | COMMUNICATION |
+              | FAILURE        | FAILURE        | FAILURE       |
+______________|________________|________________|_______________|
+MOV UP, RIGHT |MOV LEFT,ACC    |MOV LEFT, ACC   |MOV LEFT, ACC
+              |MOV ACC,RIGHT   |MOV ACC, RIGHT  |JLZ LOWER
+              |JGZ GREATER     |JNZ NOTEQUAL    |MOV NIL,ACC
+              |JMP EXC         |JMP EQUAL       |MOV ACC,DOWN
+              |GREATER:        |NOTEQUAL:       |JMP NOPE
+              |MOV 1, DOWN     |MOV 0, DOWN     |LOWER:
+              |JMP NOPE        |JMP NOPE        |MOV 1,DOWN
+              |EXC:            |EQUAL:          |NOPE:
+              |MOV 0, DOWN     |MOV 1,DOWN      |NOP 
+              |NOPE:           |NOPE:           |
+              |NOP             |NOP             |
